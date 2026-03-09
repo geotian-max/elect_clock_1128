@@ -3,273 +3,271 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>11月28日投票倒數 | 台灣歷史夥伴</title>
+    <title>11月28日投票倒數 | 生物龐克精準版 V29.0</title>
     <style>
         :root {
-            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            --accent-color: #38BDF8;
-            --glass-bg: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.1);
+            --bg-deep: #050101;
+            --organ-red: #4a0404;
+            --accent-color: #22d3ee;
+            --biolume: rgba(34, 211, 238, 0.4);
+            --membrane: rgba(255, 255, 255, 0.12);
             --text-primary: #f8fafc;
-            --text-secondary: #94a3b8;
+            --up-color: #ff2d55;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', -apple-system, "Microsoft JhengHei", sans-serif; }
-
+        /* 絕對第一屏規範：嚴禁捲動 */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', "Microsoft JhengHei", sans-serif; cursor: none; }
         body {
-            background: var(--bg-gradient);
+            background-color: var(--bg-deep);
+            background-image: radial-gradient(circle at 50% 50%, var(--organ-red) 0%, transparent 85%), linear-gradient(135deg, #050101 0%, #1a1a2e 100%);
             color: var(--text-primary);
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-            position: relative;
+            height: 100vh; width: 100vw;
+            display: flex; justify-content: center; align-items: center;
+            overflow: hidden; position: relative;
         }
 
-        .glow {
-            position: absolute;
-            width: 40vw; height: 40vw;
-            background: radial-gradient(circle, rgba(56, 189, 248, 0.1) 0%, rgba(56, 189, 248, 0) 70%);
-            border-radius: 50%; top: -10%; right: -10%; z-index: 0;
-            animation: pulse 8s infinite alternate;
-        }
-        @keyframes pulse { from { transform: scale(1); opacity: 0.3; } to { transform: scale(1.1); opacity: 0.5; } }
+        /* 背景血管脈動 */
+        .vein-glow { position: absolute; width: 100%; height: 100%; background: radial-gradient(circle, rgba(153, 27, 27, 0.15) 0%, transparent 70%); animation: heartbeat 6s infinite ease-in-out; pointer-events: none; }
+        @keyframes heartbeat { 0%, 100% { opacity: 0.15; transform: scale(1); } 50% { opacity: 0.35; transform: scale(1.03); } }
 
-        /* 左上角任務欄 */
-        .daily-tasks {
-            position: fixed; top: 10px; left: 10px; z-index: 100;
-            display: flex; flex-direction: column; gap: 5px;
+        /* 鼠標粒子 */
+        .cursor-trail {
+            position: fixed; width: 6px; height: 6px; background: var(--accent-color); border-radius: 50%; pointer-events: none; z-index: 9999;
+            box-shadow: 0 0 10px var(--accent-color); transition: transform 0.1s ease-out, opacity 0.4s ease-out; transform: translate(-50%, -50%);
         }
+
+        /* 固定 UI 元素 */
+        .fixed-ui { position: fixed; top: 12px; z-index: 100; }
+        .daily-tasks { left: 12px; display: flex; flex-direction: column; gap: 5px; }
+
         .task-item {
-            background: var(--glass-bg); border: 1px solid var(--glass-border);
-            padding: 5px 10px; border-radius: 8px; font-size: 0.7rem;
-            color: var(--text-secondary); cursor: pointer; backdrop-filter: blur(10px);
-            transition: all 0.2s ease; display: flex; align-items: center; gap: 6px; user-select: none;
+            background: rgba(20, 5, 5, 0.85); border: 1px solid var(--membrane); padding: 5px 12px; border-radius: 4px; font-size: 0.65rem;
+            color: #64748b; transition: 0.3s; display: flex; align-items: center; gap: 8px; user-select: none;
         }
-        .task-item::before { content: ''; width: 10px; height: 10px; border: 1.5px solid var(--accent-color); border-radius: 2px; }
-        .task-item.completed { background: var(--accent-color); color: #0f172a; font-weight: 600; border-color: var(--accent-color); }
-        .task-item.completed::before { background: #0f172a; border-color: #0f172a; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E") no-repeat center; -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E") no-repeat center; }
+        .task-item.completed { background: rgba(34, 211, 238, 0.1); border-color: var(--accent-color); color: #fff; box-shadow: inset 0 0 8px var(--biolume); }
 
-        .container { position: relative; z-index: 1; width: 95%; max-width: 780px; display: flex; flex-direction: column; padding: 0.2rem; }
+        /* 中央容器 */
+        .container { position: relative; z-index: 1; width: 96%; max-width: 1000px; display: flex; flex-direction: column; gap: 8px; }
+        
+        .info-bar { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-bottom: 5px; }
+        .info-tag { background: rgba(0,0,0,0.7); border: 1px solid var(--membrane); padding: 4px 14px; border-radius: 2px; font-size: 0.6rem; letter-spacing: 1px; color: #64748b; }
+        .info-tag strong { color: var(--accent-color); text-shadow: 0 0 8px var(--biolume); }
 
-        .info-bar { display: flex; justify-content: center; gap: 6px; margin-bottom: 0.4rem; flex-wrap: wrap; }
-        .info-tag { background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 3px 8px; border-radius: 100px; font-size: 0.6rem; color: var(--text-secondary); display: flex; align-items: center; gap: 3px; }
-        .info-tag strong { color: var(--accent-color); }
-
-        .header { margin-bottom: 0.5rem; display: flex; flex-direction: row; align-items: center; justify-content: center; gap: 8px; }
-        .header h1 { font-size: clamp(0.9rem, 3vw, 1.6rem); font-weight: 700; background: linear-gradient(to bottom right, #fff, #94a3b8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; white-space: nowrap; }
-        .current-date-box { background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 4px 8px; border-radius: 6px; font-size: clamp(0.65rem, 2vw, 0.85rem); color: var(--text-secondary); backdrop-filter: blur(5px); }
-
-        /* 倒數框框 - 寬度精簡優化 */
-        .countdown-grid { 
-            display: grid; 
-            grid-template-columns: repeat(4, 1fr); 
-            gap: 0.4rem; 
-            margin: 0 auto 0.6rem auto; 
-            max-width: 320px; 
-            width: 100%;
+        .header h1 { 
+            text-align: center; font-size: clamp(1.4rem, 5vw, 2.5rem); font-weight: 900; letter-spacing: 0.2em; margin-bottom: 2px;
+            background: linear-gradient(to bottom, #fff, #475569); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
-        .time-card { background: var(--glass-bg); border: 1px solid var(--glass-border); backdrop-filter: blur(12px); padding: 0.4rem 0.1rem; border-radius: 8px; text-align: center; }
-        .time-value { display: block; font-size: clamp(1.2rem, 4vw, 1.8rem); font-weight: 800; color: var(--accent-color); line-height: 1; margin-bottom: 0.1rem; }
-        .time-label { display: block; color: var(--text-secondary); font-size: 0.5rem; text-transform: uppercase; }
 
-        .insights-row { display: flex; gap: 0.6rem; margin-bottom: 0.4rem; align-items: stretch; }
-        .glass-section { flex: 1; background: rgba(0, 0, 0, 0.15); border: 1px solid var(--glass-border); padding: 0.7rem; border-radius: 15px; display: flex; flex-direction: column; justify-content: space-between; min-height: 100px; }
-        .section-tag { font-size: 0.55rem; color: var(--accent-color); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.3rem; display: block; }
-        .main-content { font-size: clamp(0.7rem, 2vw, 0.8rem); line-height: 1.35; color: var(--text-primary); margin-bottom: 0.3rem; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+        /* 液晶倒數面板 */
+        .countdown-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin: 0.2rem auto; max-width: 460px; width: 100%; }
+        .time-card { background: #000; border: 1px solid #300; padding: 0.8rem 0.1rem; border-radius: 10px; text-align: center; box-shadow: inset 0 0 30px #1a0000; }
+        .time-value { display: block; font-size: clamp(2rem, 7vw, 3.2rem); font-weight: 900; color: var(--accent-color); text-shadow: 0 0 20px var(--biolume); animation: flicker 5s infinite alternate; }
+        @keyframes flicker { 0%, 100% { opacity: 0.85; } 50% { opacity: 1; filter: brightness(1.2); } }
+        .time-label { font-size: 0.6rem; color: #475569; letter-spacing: 3px; font-weight: 800; margin-top: -2px; }
 
-        .ai-actions { display: flex; justify-content: center; gap: 4px; margin-top: auto; }
-        .ai-btn { background: rgba(255, 255, 255, 0.04); border: 1px solid var(--accent-color); color: var(--accent-color); padding: 2px 6px; border-radius: 50px; font-size: 0.55rem; cursor: pointer; transition: all 0.2s ease; }
-        .ai-btn:hover { background: var(--accent-color); color: #000; }
-
-        .footer { font-size: 0.55rem; color: var(--text-secondary); text-align: center; margin-top: 0.1rem; opacity: 0.6; }
-
-        /* 右下按鈕 */
-        .controls-panel { position: fixed; bottom: 10px; right: 10px; z-index: 100; }
-        .toggle-btn { 
-            background: var(--accent-color); width: 28px; height: 28px; border-radius: 50%; 
-            display: flex; justify-content: center; align-items: center; cursor: pointer; border: none; 
-            box-shadow: 0 2px 8px rgba(0,0,0,0.3); transition: transform 0.2s;
+        /* 雙看板排版：調整比例 35% vs 65% */
+        .insights-row { display: grid; grid-template-columns: 35% 65%; gap: 1rem; height: 32vh; max-height: 230px; }
+        .glass-section { 
+            background: rgba(10, 5, 5, 0.85); border: 1px solid var(--membrane); padding: 1.5rem; border-radius: 4px; backdrop-filter: blur(25px);
+            position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: center;
         }
-        .toggle-btn:active { transform: scale(0.9); }
+        .section-tag { font-size: 0.7rem; color: var(--accent-color); letter-spacing: 1.5px; margin-bottom: 8px; font-weight: 900; border-left: 4px solid var(--accent-color); padding-left: 10px; }
+        .today-date { font-size: 1.4rem; font-weight: 900; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 6px; margin-bottom: 6px; }
+        
+        /* 金句內容溢出保護 */
+        .main-content { 
+            font-size: 1rem; line-height: 1.5; color: #cbd5e1; 
+            display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; 
+            overflow-y: auto; font-style: italic; 
+            scrollbar-width: none; /* 隱藏捲軸 */
+        }
+        .main-content::-webkit-scrollbar { display: none; }
 
-        @media (max-width: 600px) {
-            body { overflow-y: auto; align-items: flex-start; padding-top: 45px; }
-            .daily-tasks { position: absolute; top: 8px; width: 100%; flex-direction: row; justify-content: center; padding: 0 8px; left: 0; }
-            .task-item { flex: 1; font-size: 0.6rem; padding: 4px; justify-content: center; }
-            .header { flex-direction: column-reverse; gap: 3px; }
-            .countdown-grid { grid-template-columns: repeat(2, 1fr); max-width: 200px; }
-            .insights-row { flex-direction: column; gap: 0.5rem; }
-            .glass-section { min-height: 85px; padding: 0.6rem; }
+        /* 狂暴骰子與控制 */
+        .dice-grid-btn {
+            position: absolute; bottom: 10px; right: 10px; background: rgba(0,0,0,0.85); border: 1px solid var(--accent-color);
+            padding: 6px; border-radius: 6px; display: flex; gap: 5px; transition: 0.3s; z-index: 10;
+        }
+        .dice-grid-btn:hover { background: var(--accent-color); box-shadow: 0 0 30px var(--biolume); transform: scale(1.1); }
+        .dice-grid-btn svg { width: 18px; height: 18px; fill: var(--accent-color); will-change: transform; }
+        .dice-grid-btn:hover svg { fill: #000; }
+
+        /* 極限震動動畫 */
+        .dice-grid-btn:hover svg:nth-child(1) { animation: dv-1 0.012s infinite; }
+        .dice-grid-btn:hover svg:nth-child(2) { animation: dv-2 0.03s infinite; }
+        .dice-grid-btn:hover svg:nth-child(3) { animation: dv-3 0.018s infinite; }
+
+        @keyframes dv-1 { 0%, 100% { transform: translate(0,0); } 25% { transform: translate(-10px,12px) rotate(-110deg); } 50% { transform: translate(12px,-8px) rotate(90deg); } }
+        @keyframes dv-2 { 0%, 100% { transform: translate(0,0); } 25% { transform: translate(12px,-10px) rotate(150deg); } 50% { transform: translate(-10px,12px) rotate(-130deg); } }
+        @keyframes dv-3 { 0%, 100% { transform: translate(0,0); } 20% { transform: translate(10px,10px) rotate(-180deg); } 40% { transform: translate(-15px,-10px) rotate(140deg); } }
+
+        .controls-panel { position: fixed; bottom: 25px; right: 25px; z-index: 1000; }
+        .palette-btn { 
+            background: #000; width: 44px; height: 44px; border-radius: 50%; display: flex; justify-content: center; align-items: center; 
+            border: 1px solid var(--accent-color); box-shadow: 0 0 15px var(--biolume); transition: 0.3s;
+        }
+        .palette-btn:active { transform: scale(0.9); }
+
+        .footer { font-size: 0.5rem; color: #334155; text-align: center; letter-spacing: 3px; margin-top: 10px; text-transform: uppercase; }
+
+        @media (max-width: 850px) {
+            .insights-row { grid-template-columns: 1fr; height: auto; max-height: none; }
+            body { overflow-y: auto; align-items: flex-start; padding-top: 80px; }
+            .weather-panel { top: auto; bottom: 80px; right: 12px; }
         }
     </style>
 </head>
 <body>
+    <div class="vein-glow"></div>
 
-    <div class="glow"></div>
-
-    <div class="daily-tasks">
-        <div class="task-item" id="task-sport" onclick="toggleTask('sport')">運動</div>
-        <div class="task-item" id="task-camera" onclick="toggleTask('camera')">拍攝</div>
-        <div class="task-item" id="task-read" onclick="toggleTask('read')">閱讀</div>
+    <div class="fixed-ui daily-tasks">
+        <div class="task-item" id="task-sport" onclick="toggleTask('sport')">身體運動</div>
+        <div class="task-item" id="task-camera" onclick="toggleTask('camera')">拍攝剪輯</div>
+        <div class="task-item" id="task-read" onclick="toggleTask('read')">知識攝取</div>
     </div>
 
     <div class="container">
         <div class="info-bar">
-            <div class="info-tag">今日農曆：<strong id="lunar-date">...</strong></div>
-            <div class="info-tag">下個節日：<strong id="next-holiday">...</strong></div>
-            <div class="info-tag">粉絲追蹤：<strong>7,710</strong></div>
+            <div class="info-tag">FB 粉絲：<strong>7,710</strong></div>
+            <div class="info-tag">下個節日：<strong id="next-holiday">SYNCING</strong></div>
+            <div class="info-tag">目標日期：<strong>2026/11/28</strong></div>
         </div>
 
-        <div class="header">
-            <div class="current-date-box" id="current-date-display">...</div>
-            <h1>距離投票日還有</h1>
-        </div>
+        <div class="header"><h1>距離投票日還有</h1></div>
 
         <div class="countdown-grid">
-            <div class="time-card"><span class="time-value" id="days">00</span><span class="time-label">天</span></div>
-            <div class="time-card"><span class="time-value" id="hours">00</span><span class="time-label">時</span></div>
-            <div class="time-card"><span class="time-value" id="minutes">00</span><span class="time-label">分</span></div>
-            <div class="time-card"><span class="time-value" id="seconds">00</span><span class="time-label">秒</span></div>
+            <div class="time-card"><span class="time-value" id="days">--</span><span class="time-label">DAYS</span></div>
+            <div class="time-card"><span class="time-value" id="hours">--</span><span class="time-label">HRS</span></div>
+            <div class="time-card"><span class="time-value" id="minutes">--</span><span class="time-label">MINS</span></div>
+            <div class="time-card"><span class="time-value" id="seconds">--</span><span class="time-label">SECS</span></div>
         </div>
 
         <div class="insights-row">
+            <!-- 左看板：今天日期 (縮小寬度) -->
             <div class="glass-section">
-                <div>
-                    <span class="section-tag">台灣歷史上的今天</span>
-                    <div id="history-content" class="main-content">同步歷史中...</div>
-                </div>
-                <div class="ai-actions">
-                    <button class="ai-btn" onclick="updateTaiwanHistory()">✨ 同步歷史</button>
-                </div>
+                <span class="section-tag">今天日期</span>
+                <div class="today-date" id="display-date">---</div>
+                <div id="display-lunar" style="font-weight: 700; color: var(--up-color); font-size: 1rem;">正在提取相位...</div>
             </div>
 
+            <!-- 右看板：智慧金句 (擴大寬度並防溢出) -->
             <div class="glass-section">
-                <div>
-                    <span class="section-tag">每日金句</span>
-                    <p class="main-content" id="quote-content" style="font-style: italic;">智慧思考中...</p>
-                </div>
-                <div class="ai-actions">
-                    <button class="ai-btn" id="ai-insight-btn">✨ AI 見解</button>
-                    <button class="ai-btn" id="ai-vote-btn">✨ 叮嚀</button>
+                <span class="section-tag" id="quote-tag">智慧金句 (0/0)</span>
+                <p class="main-content" id="quote-content">正在解構智慧陣列...</p>
+                <div class="dice-grid-btn" onclick="randomizeQuote()" title="隨機抽選智慧">
+                    <svg viewBox="0 0 24 24"><path d="M5 3C3.9 3 3 3.9 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19V5C21 3.9 20.1 3 19 3H5ZM7 7C7.55 7 8 7.45 8 8C8 8.55 7.55 9 7 9C6.45 9 6 8.55 6 8C6 7.45 6.45 7 7 7ZM17 7C17.55 7 18 7.45 18 8C18 8.55 17.55 9 17 9C16.45 9 16 8.55 16 8C16 7.45 16.45 7 17 7ZM12 11C12.55 11 13 11.45 13 12C13 12.55 12.55 13 12 13C11.45 13 11 12.55 11 12C11 11.45 11.45 11 12 11ZM7 15C7.55 15 8 15.45 8 16C8 16.55 7.55 17 7 17C6.45 17 6 16.55 6 16C6 15.45 6.45 15 7 15ZM17 15C17.55 15 18 15.45 18 16C18 16.55 17.55 17 17 17C16.45 17 16 16.55 16 16C16 15.45 16.45 15 17 15Z"/></svg>
+                    <svg viewBox="0 0 24 24"><path d="M5 3C3.9 3 3 3.9 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19V5C21 3.9 20.1 3 19 3H5ZM7 7C7.55 7 8 7.45 8 8C8 8.55 7.55 9 7 9C6.45 9 6 8.55 6 8C6 7.45 6.45 7 7 7ZM17 7C17.55 7 18 7.45 18 8C18 8.55 17.55 9 17 9C16.45 9 16 8.55 16 8C16 7.45 16.45 7 17 7ZM12 11C12.55 11 13 11.45 13 12C13 12.55 12.55 13 12 13C11.45 13 11 12.55 11 12C11 11.45 11.45 11 12 11ZM7 15C7.55 15 8 15.45 8 16C8 16.55 7.55 17 7 17C6.45 17 6 16.55 6 16C6 15.45 6.45 15 7 15ZM17 15C17.55 15 18 15.45 18 16C18 16.55 17.55 17 17 17C16.45 17 16 16.55 16 16C16 15.45 16.45 15 17 15Z"/></svg>
+                    <svg viewBox="0 0 24 24"><path d="M5 3C3.9 3 3 3.9 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19V5C21 3.9 20.1 3 19 3H5ZM7 7C7.55 7 8 7.45 8 8C8 8.55 7.55 9 7 9C6.45 9 6 8.55 6 8C6 7.45 6.45 7 7 7ZM17 7C17.55 7 18 7.45 18 8C18 8.55 17.55 9 17 9C16.45 9 16 8.55 16 8C16 7.45 16.45 7 17 7ZM12 11C12.55 11 13 11.45 13 12C13 12.55 12.55 13 12 13C11.45 13 11 12.55 11 12C11 11.45 11.45 11 12 11ZM7 15C7.55 15 8 15.45 8 16C8 16.55 7.55 17 7 17C6.45 17 6 16.55 6 16C6 15.45 6.45 15 7 15ZM17 15C17.55 15 18 15.45 18 16C18 16.55 17.55 17 17 17C16.45 17 16 16.55 16 16C16 15.45 16.45 15 17 15Z"/></svg>
                 </div>
             </div>
         </div>
-
-        <div class="footer">Gemini AI 驅動 · 2026 民主夥伴</div>
+        <div class="footer">BIOPUNK INTERFACE V29.0 · 110+ WISDOM ARRAY STABILIZED</div>
     </div>
 
+    <!-- 右下角調色盤按鈕 -->
     <div class="controls-panel">
-        <button class="toggle-btn" id="toggle-settings" onclick="changeColor()">
-            <svg viewBox="0 0 24 24" width="14" fill="black"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8zm-5.5 9c-.83 0-1.5-.67-1.5-1.5S5.67 9 6.5 9 8 9.67 8 10.5 7.33 12 6.5 12zm3-4C8.67 8 8 7.33 8 6.5S8.67 5 9.5 5s1.5.67 1.5 1.5S10.33 8 9.5 8zm5 0c-.83 0-1.5-.67-1.5-1.5S13.67 5 14.5 5s1.5.67 1.5 1.5S15.33 8 14.5 8zm3 4c-.83 0-1.5-.67-1.5-1.5S16.67 9 17.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+        <button class="palette-btn" onclick="changeColor()" title="切換視覺色調">
+            <svg viewBox="0 0 24 24" width="20" fill="var(--accent-color)"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8zm-5.5 9c-.83 0-1.5-.67-1.5-1.5S5.67 9 6.5 9 8 9.67 8 10.5 7.33 12 6.5 12zm3-4C8.67 8 8 7.33 8 6.5S8.67 5 9.5 5s1.5.67 1.5 1.5S10.33 8 9.5 8zm5 0c-.83 0-1.5-.67-1.5-1.5S13.67 5 14.5 5s1.5.67 1.5 1.5S15.33 8 14.5 8zm3 4c-.83 0-1.5-.67-1.5-1.5S16.67 9 17.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
         </button>
     </div>
 
     <script>
-        const apiKey = "AIzaSyAr4abmsNxKyiIuCrrM3z4Bk_6dQRB5Luk";
-        const modelName = "gemini-1.5-flash";
-        
-        const taiwanHistoryFallback = {
-            "3月8日": "1947年3月8日，二二八事件期間，國民政府派遣之整編第21師由基隆登陸，隨後展開大規模武裝鎮壓與清鄉。",
-            "default": "台灣歷史跨越了大航海、清領、日治到現代民主，每一天都在見證這塊土地的轉變與韌性。"
+        // 鼠標粒子
+        document.addEventListener('mousemove', (e) => {
+            const p = document.createElement('div');
+            p.className = 'cursor-trail'; p.style.left = e.clientX + 'px'; p.style.top = e.clientY + 'px';
+            document.body.appendChild(p);
+            const size = Math.random() * 5 + 3; p.style.width = size + 'px'; p.style.height = size + 'px';
+            setTimeout(() => { p.style.opacity = '0'; p.style.transform = 'translate(-50%, -50%) scale(0.3)'; setTimeout(() => p.remove(), 400); }, 50);
+        });
+
+        const quotes = [
+            "歷史不會爬行，它會跳躍。——《黑天鵝》", "最重要的東西往往是看不見的。——《隨機騙局》", "你要當一個能在亂局中獲益的人。——《反脆弱》", "自由的代價是永恆的警覺。——《不對稱陷阱》", "手中每一票，都是對未來最堅定的寄託。——《民主與選擇》",
+            "知識的增加有時會導致信心的增加，而非精準度的增加。——《黑天鵝》", "如果你知道這是一個黑天鵝，那它就不是黑天鵝。——《黑天鵝》", "強風會吹滅蠟燭，但能使火越燒越旺。——《反脆弱》", "我們傾向於低估隨機性的重要性。——《隨機騙局》", "沒有切身利害，就沒有真正的學習。——《不對稱陷阱》",
+            "脆弱的東西喜歡安寧，強韌的東西不在乎環境，反脆弱的東西則從混亂中成長。——《反脆弱》", "勇氣是唯一的考驗。——《不對稱陷阱》", "真正的專家看起來不應該像個專家。——《不對稱陷阱》", "在現代社會，人們因為過度治療而生病。——《反脆弱》", "我們對無知的恐懼，遠大於我們對知識的渴望。——《黑天鵝》",
+            "那些讓你更強壯的事物，通常也會讓你感覺痛苦。——《反脆弱》", "機遇只垂青於有準備的頭腦。——《隨機騙局》", "預測未來最好的方式是去創造它。——《黑天鵝》", "理論是廉價的，實踐才是昂貴的。——《不對稱陷阱》", "如果你不承擔風險，你就不應該擁有發言權。——《不對稱陷阱》",
+            "大數據有時只是更大的噪音。——《黑天鵝》", "閱讀一本老書，能讓你看到現代人的盲點。——《隨機騙局》", "真正的獨立是不受他人評價的影響。——《不對稱陷阱》", "複雜系統中，微小的擾動可能導致劇變。——《反脆弱》", "你的大腦不是用來記住事實的，而是用來預判風險的。——《黑天鵝》",
+            "寧鳴而死，不默而生。——《胡適選集》", "想像力比知識更重要。——《愛因斯坦語錄》", "保持飢渴，保持愚蠢。——《賈伯斯傳》", "秩序是自由的保障。——《政治學導論》", "選票是公民的權杖。——《民主的種子》",
+            "世界因多元而美麗。——《文化多樣性》", "公平是文明的底線。——《正義論》", "尊重差異是和平的前提。——《和平研究》", "行動是抗擊絕望的良藥。——《存在主義筆記》", "當你凝視深淵，深淵也凝視著你。——《善惡的彼岸》",
+            "時間是真相的守護者。——《古希臘箴言》", "智慧的開端是承認無知。——《蘇格拉底筆記》", "自由是你可以不想做什麼。——《盧梭思辨》", "不要追馬，要種草。——《處世哲學》", "勇氣是在恐懼面前依然前行。——《海明威短評》",
+            "手中的每一票都重如泰山。——《公民教育》", "民主的種子需要勇氣灌溉。——《政治哲學》", "真理不怕火煉。——《名言錄》", "時間會證明一切。——《歷史的判決》", "善意是通往未來的鑰匙。——《心理學導引》",
+            "每一份努力都是在為理想投下一票。——《原子習慣》", "習慣是複利的利息。——《原子習慣》", "決定你成就的不是你的目標，而是你的系統。——《原子習慣》", "所有的改變都始於微小的選擇。——《選擇的力量》", "只有在黑暗中，你才能看見星星。——《馬丁·路德·金語錄》",
+            "不要讓別人的意見淹沒你內心的聲音。——《賈伯斯傳》", "活著就是一場對抗熵增的戰鬥。——《薛丁格的貓》", "在資訊過載的時代，過濾的能力就是智慧。——《黑天鵝》", "風險不是你所看見的，而是你所沒看見的。——《隨機騙局》", "我們必須保持憤怒，但不要失去希望。——《羅曼·羅蘭》",
+            "現代生活的特點不是缺乏時間，而是缺乏深度。——《反脆弱》", "如果你想了解一個人，看他如何對待那些對他毫無用處的人。——《不對稱陷阱》", "成功是從一個失敗走到另一個失敗，卻不熱情消減。——《邱吉爾語錄》", "不要為打翻的牛奶哭泣。——《卡內基人生》", "所有的痛苦本質上都是對自身無能的憤怒。——《尼采文選》",
+            "世界不欠你任何東西，它比你先到。——《馬克·吐溫》", "最好的報復是成功。——《法蘭克·辛納屈》", "如果你不掌管自己的生活，別人就會。——《自我管理》", "平庸是智慧的殺手。——《黑天鵝》", "隨機性不是混亂，而是我們不理解的秩序。——《隨機騙局》",
+            "沒有風險，就沒有靈魂。——《不對稱陷阱》", "脆弱性是一種選擇。——《反脆弱》", "在大難不死之後，你會變得更強大。——《反脆弱》", "專注是現代社會的稀缺資源。——《深度工作》", "簡約是最終的細緻。——《達文西筆記》",
+            "教育的目標是用空的大腦填滿開放的心靈。——《教育論》", "不要去解釋，去做學。——《實踐力量》", "真正的財富是你的自由。——《不對稱陷阱》", "生活就像一盒巧克力。——《阿甘正傳》", "只有那些敢於大幅失敗的人，才能大幅成就。——《甘迺迪》",
+            "意志力是有限的，環境是無限的。——《原子習慣》", "重複是技能之母。——《心理暗示》", "你就是你所重複做的事。——《亞里斯多德》", "恐懼來自於未知。——《心理學基礎》", "在亂世中，邏輯是最後的防線。——《隨機騙局》",
+            "真相不需要大聲疾呼。——《格言集》", "智慧是在嘈雜中聽見沉默。——《東方哲學》", "手中的票是未來的種子。——《民主的未來》", "權力趨向腐敗。——《阿克頓勳爵》", "對邪惡的沉默就是共謀。——《社會契約論》",
+            "歷史是由勝利者書寫的，但真相是由時間守護的。——《黑天鵝》", "反脆弱是生命的核心。——《反脆弱》", "不要聽他們說什麼，看他們做什麼。——《不對稱陷阱》", "隨機性會懲罰那些傲慢的人。——《隨機騙局》", "最重要的決定不是你要做什麼，而是你不做什麼。——《賈伯斯》",
+            "保持清醒比保持快樂更重要。——《存在主義》", "手中的每一票都負載著歷史。——《公民意識》", "自由不是隨心所欲，而是自我主宰。——《康德哲學》", "在最黑暗的時刻，也要尋找光。——《名言錄》", "你的選擇決定了你是誰。——《沙特文集》",
+            "知識是抵禦操縱的唯一盾牌。——《大眾心理學》", "智慧是知道自己不知道。——《蘇格拉底》", "我們是時間的旅人。——《物理與哲學》", "不要放棄你的思考權。——《胡適語錄》", "民主是一場永無止盡的馬拉松。——《政治觀察》",
+            "手中握著選票，心中存著良知。——《民主與選擇》", "每一份堅持都是對未來的承諾。——《心靈力量》", "守護民主是跨世代的約定。——《政治學原理》", "真相終將浮現。——《黑天鵝》", "這是我們共同的土地。——《家園意識》",
+            "自律即自由。——《康德》", "人生是一場修煉。——《王陽明》", "格局決定結局。——《智慧錄》", "不要用戰術上的勤奮掩蓋戰略上的懶惰。——《雷軍》", "唯有變革是不變的。——《易經思維》",
+            "在別人的劇本裡，你永遠是配角。——《獨立精神》", "所謂成熟，是學會與孤獨相處。——《哲學筆記》", "最遠的距離是從說到做。——《行動指南》", "痛苦是覺醒的開始。——《心理深度》", "每一天都是餘生最年輕的一天。——《生活觀》",
+            "當你停止學習，你就開始死亡。——《愛因斯坦》", "不要讓過去定義你的未來。——《心靈成長》", "所有偉大的事都始於渺小。——《老子》", "保持耐心，所有的好事都會發生。——《生活哲學》", "你是你選擇的總和。——《存在主義》"
+        ];
+
+        const holidays2026 = [{ name: "元旦", date: "2026-01-01" }, { name: "春節", date: "2026-02-17" }, { name: "和平紀念日", date: "2026-02-28" }, { name: "兒童節", date: "2026-04-04" }, { name: "清明節", date: "2026-04-05" }, { name: "端午節", date: "2026-06-19" }, { name: "中秋節", date: "2026-09-25" }, { name: "國慶日", date: "2026-10-10" }];
+
+        // 智慧金句隨機化與排序 (分子/分母)
+        window.randomizeQuote = () => {
+            const total = quotes.length;
+            const idx = Math.floor(Math.random() * total);
+            document.getElementById('quote-content').innerText = `「${quotes[idx]}」`;
+            document.getElementById('quote-tag').innerText = `智慧金句 (${idx + 1}/${total})`;
+            // 自動回到頂部（如果產生捲軸）
+            document.getElementById('quote-content').scrollTop = 0;
         };
 
-        const blackSwanQuotes = ["歷史不會爬行，它會跳躍。", "最重要的東西往往是看不見的。", "你要當一個能在亂局中獲益的人。", "專注於已知的事物往往會讓我們對未知的事物視而不見。"];
-        const holidays2026 = [{ name: "元旦", date: "2026-01-01" }, { name: "農曆春節", date: "2026-02-17" }, { name: "和平紀念日", date: "2026-02-28" }, { name: "兒童節", date: "2026-04-04" }, { name: "清明節", date: "2026-04-05" }, { name: "端午節", date: "2026-06-19" }, { name: "中秋節", date: "2026-09-25" }, { name: "國慶日", date: "2026-10-10" }];
+        // 調色盤邏輯
+        window.changeColor = () => {
+            const colors = ['#22d3ee', '#f43f5e', '#10b981', '#f59e0b', '#a855f7'];
+            let current = localStorage.getItem('accent_color') || '#22d3ee';
+            let next = colors[(colors.indexOf(current.toLowerCase()) + 1) % colors.length];
+            document.documentElement.style.setProperty('--accent-color', next);
+            localStorage.setItem('accent_color', next);
+        };
 
-        async function callGemini(prompt) {
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
-            try {
-                const res = await fetch(url, { 
-                    method: 'POST', 
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }) 
-                });
-                const data = await res.json();
-                return data.candidates?.[0]?.content?.parts?.[0]?.text || null;
-            } catch (e) { return null; }
-        }
-
-        async function updateTaiwanHistory() {
-            const el = document.getElementById('history-content');
-            el.innerText = "搜尋台灣歷史中...";
-            const now = new Date();
-            const dateStr = `${now.getMonth()+1}月${now.getDate()}日`;
-            
-            const result = await callGemini(`請用大約 50 字繁體中文描述一件與台灣發展相關且發生在 ${dateStr} 的歷史重大事件。`);
-            el.innerText = result || taiwanHistoryFallback[dateStr] || taiwanHistoryFallback["default"];
-        }
-
-        function toggleTask(id) {
+        // 任務切換
+        window.toggleTask = (id) => {
             const el = document.getElementById(`task-${id}`);
             el.classList.toggle('completed');
             localStorage.setItem(`task_${id}`, el.classList.contains('completed'));
-        }
-
-        function changeColor() {
-            const colors = ['#38BDF8', '#F43F5E', '#10B981', '#F59E0B', '#A855F7'];
-            let current = localStorage.getItem('accent_color') || '#38BDF8';
-            let currentIndex = colors.findIndex(c => c.toUpperCase() === current.toUpperCase());
-            if (currentIndex === -1) currentIndex = 0;
-            let next = colors[(currentIndex + 1) % colors.length];
-            document.documentElement.style.setProperty('--accent-color', next);
-            localStorage.setItem('accent_color', next);
-        }
+        };
 
         function init() {
             const now = new Date();
             const weekDays = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
-            document.getElementById('current-date-display').innerHTML = `<strong>${now.getMonth()+1}月${now.getDate()}日</strong> (${weekDays[now.getDay()]})`;
-            try { document.getElementById('lunar-date').innerText = new Intl.DateTimeFormat('zh-TW-u-ca-chinese', { day: 'numeric', month: 'long' }).format(now); } catch(e){}
+            document.getElementById('display-date').innerText = `${now.getMonth()+1}月${now.getDate()}日 (${weekDays[now.getDay()]})`;
+            try { document.getElementById('display-lunar').innerText = `農曆: ${new Intl.DateTimeFormat('zh-TW-u-ca-chinese', { day: 'numeric', month: 'long' }).format(now)}`; } catch(e){}
             
-            const todayStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
-            let nextH = holidays2026.find(h => h.date >= todayStr);
+            const todayStr = now.toISOString().split('T')[0];
+            const nextH = holidays2026.find(h => h.date >= todayStr);
             if(nextH) {
-                const diff = Math.round((new Date(nextH.date) - new Date(now.getFullYear(), now.getMonth(), now.getDate()))/(1000*60*60*24));
-                document.getElementById('next-holiday').innerText = `${nextH.name} (${diff===0?"今天!":diff+"天後"})`;
+                const diff = Math.round((new Date(nextH.date) - new Date(now.getFullYear(), now.getMonth(), now.getDate())) / 86400000);
+                document.getElementById('next-holiday').innerText = `${nextH.name} (${diff===0?"今天":diff+"D"})`;
             }
 
+            // 2026年11月28日倒數
             const target = new Date('2026-11-28T00:00:00').getTime();
             setInterval(() => {
                 const diff = target - new Date().getTime();
                 if(diff < 0) return;
-                document.getElementById('days').innerText = Math.floor(diff/(1000*60*60*24)).toString().padStart(2,'0');
-                document.getElementById('hours').innerText = Math.floor((diff%(1000*60*60*24))/(1000*60*60)).toString().padStart(2,'0');
-                document.getElementById('minutes').innerText = Math.floor((diff%(1000*60*60))/(1000*60)).toString().padStart(2,'0');
-                document.getElementById('seconds').innerText = Math.floor((diff%(1000*60))/1000).toString().padStart(2,'0');
+                document.getElementById('days').innerText = Math.floor(diff/86400000).toString().padStart(2,'0');
+                document.getElementById('hours').innerText = Math.floor((diff%86400000)/3600000).toString().padStart(2,'0');
+                document.getElementById('minutes').innerText = Math.floor((diff%3600000)/60000).toString().padStart(2,'0');
+                document.getElementById('seconds').innerText = Math.floor((diff%60000)/1000).toString().padStart(2,'0');
             }, 1000);
 
+            randomizeQuote();
             const savedColor = localStorage.getItem('accent_color');
             if(savedColor) document.documentElement.style.setProperty('--accent-color', savedColor);
-
-            const lastReset = localStorage.getItem('last_reset_date');
-            if(now.getHours() >= 1 && lastReset !== now.toDateString()) {
-                ['sport', 'camera', 'read'].forEach(id => localStorage.setItem(`task_${id}`, 'false'));
-                localStorage.setItem('last_reset_date', now.toDateString());
-            }
-
-            updateTaiwanHistory(); 
-            document.getElementById('quote-content').innerText = blackSwanQuotes[now.getDate() % blackSwanQuotes.length];
         }
 
         window.onload = () => {
             init();
-            ['sport', 'camera', 'read'].forEach(id => {
-                if(localStorage.getItem(`task_${id}`) === 'true') document.getElementById(`task-${id}`).classList.add('completed');
-            });
-            document.getElementById('ai-insight-btn').onclick = async () => {
-                const el = document.getElementById('quote-content');
-                const old = el.innerText; el.innerText = "分析中...";
-                const res = await callGemini(`針對這句金句提供40字內繁體中文哲學點評：${old}`);
-                el.innerText = res || "連線不穩，請再試一次。";
-            };
-            document.getElementById('ai-vote-btn').onclick = async () => {
-                const el = document.getElementById('quote-content');
-                el.innerText = "構思中...";
-                const res = await callGemini("生成一段40字內鼓勵大家去投票的繁體中文短語。");
-                el.innerText = res || "請記住，手中的每一票都代表著您的選擇與力量。";
-            };
+            ['sport', 'camera', 'read'].forEach(id => { if(localStorage.getItem(`task_${id}`) === 'true') document.getElementById(`task-${id}`).classList.add('completed'); });
         };
     </script>
 </body>
